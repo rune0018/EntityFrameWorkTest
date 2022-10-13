@@ -12,7 +12,21 @@ public class Program
             foreach(Task task in db.Tasks)
             {
                 Console.WriteLine(task.Name);
+                try
+                {
+                    Console.WriteLine(task.Todos.Count());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("No list");
+                }
             }
+        }
+
+        using(ProjectmanegerContext db = new ProjectmanegerContext())
+        {
+            var tasks = db.Tasks.Include(tasks=>tasks.Todos).Where(x=> x.Name == "Produce software");
+            Console.WriteLine(tasks.First().Todos.Count());
         }
     }
 
