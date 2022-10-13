@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Entity_framework_opgave.Migrations
 {
-    [DbContext(typeof(TodosContext))]
+    [DbContext(typeof(ProjectmanegerContext))]
     partial class TodosContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

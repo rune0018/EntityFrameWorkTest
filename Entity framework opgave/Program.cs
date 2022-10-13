@@ -6,22 +6,55 @@ public class Program
 {
     public static void Main()
     {
-        using(TodosContext db = new TodosContext())
+        //SeedTasks();
+        using(var db = new ProjectmanegerContext())
         {
-            db.Add(new Todo() { Title = "hejsa", Complete = false });
+            foreach(Task task in db.Tasks)
+            {
+                Console.WriteLine(task.Name);
+            }
+        }
+    }
+
+    public static void SeedTasks()
+    {
+        using(var db = new ProjectmanegerContext())
+        {
+            Task task = new Task()
+            {
+                Name = "Produce software",
+                Todos = new List<Todo>() 
+                {
+                    new Todo() {Title= "WriteCode"},
+                    new Todo() {Title= "Compile source" },
+                    new Todo() {Title= "Test program"}
+                }
+            };
+            Task task2 = new Task()
+            {
+                Name = "Brew Coffe",
+                Todos= new List<Todo>()
+                {
+                    new Todo() {Title= "Pour water"},
+                    new Todo() {Title= "Pour coffee"},
+                    new Todo() {Title= "Turn on"}
+                }
+            };
+            db.Tasks.Add(task);
+            db.Tasks.Add(task2);
             db.SaveChanges();
         }
     }
 }
 
-public class TodosContext : DbContext
+public class ProjectmanegerContext : DbContext
 {
     public DbSet<Todo> Todos { get; set; }
     public DbSet<Task> Tasks { get; set; }
 
     public string DbPath { get; }
 
-    public TodosContext()
+    public ProjectmanegerContext()
     {
         //var folder = Environment.SpecialFolder.LocalApplicationData;
         //var path = Environment.GetFolderPath(folder);
@@ -47,5 +80,5 @@ public class Task
     public int ID { get; set; }
     public string Name { get; set; }
 
-    public List<Todo> Blog { get; set; }
+    public List<Todo> Todos { get; set; }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Entity_framework_opgave.Migrations
 {
-    [DbContext(typeof(TodosContext))]
+    [DbContext(typeof(ProjectmanegerContext))]
     [Migration("20221013120210_CreatedTasksTodos")]
     partial class CreatedTasksTodos
     {
