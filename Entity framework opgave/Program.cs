@@ -6,14 +6,18 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine("hejsa");
+        using(TodosContext db = new TodosContext())
+        {
+            db.Add(new Todo() { Title = "hejsa", Complete = false });
+            db.SaveChanges();
+        }
     }
 }
 
 public class TodosContext : DbContext
 {
-    public DbSet<Todo> Blogs { get; set; }
-    public DbSet<Task> Posts { get; set; }
+    public DbSet<Todo> Todos { get; set; }
+    public DbSet<Task> Tasks { get; set; }
 
     public string DbPath { get; }
 

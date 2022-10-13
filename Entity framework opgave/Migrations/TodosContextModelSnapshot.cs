@@ -28,7 +28,7 @@ namespace Entity_framework_opgave.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Todo", b =>
@@ -51,7 +51,7 @@ namespace Entity_framework_opgave.Migrations
 
                     b.HasIndex("TaskID");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Todo", b =>

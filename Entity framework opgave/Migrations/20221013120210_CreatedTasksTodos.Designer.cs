@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_framework_opgave.Migrations
 {
     [DbContext(typeof(TodosContext))]
-    [Migration("20221013112845_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221013120210_CreatedTasksTodos")]
+    partial class CreatedTasksTodos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,7 @@ namespace Entity_framework_opgave.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Todo", b =>
@@ -53,7 +53,7 @@ namespace Entity_framework_opgave.Migrations
 
                     b.HasIndex("TaskID");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Todo", b =>

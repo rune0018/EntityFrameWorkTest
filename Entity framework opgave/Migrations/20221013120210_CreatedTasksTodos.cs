@@ -4,12 +4,12 @@
 
 namespace Entity_framework_opgave.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreatedTasksTodos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Posts",
+                name: "Tasks",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -18,11 +18,11 @@ namespace Entity_framework_opgave.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.ID);
+                    table.PrimaryKey("PK_Tasks", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Blogs",
+                name: "Todos",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -33,27 +33,27 @@ namespace Entity_framework_opgave.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Blogs", x => x.ID);
+                    table.PrimaryKey("PK_Todos", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Blogs_Posts_TaskID",
+                        name: "FK_Todos_Tasks_TaskID",
                         column: x => x.TaskID,
-                        principalTable: "Posts",
+                        principalTable: "Tasks",
                         principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_TaskID",
-                table: "Blogs",
+                name: "IX_Todos_TaskID",
+                table: "Todos",
                 column: "TaskID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Blogs");
+                name: "Todos");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "Tasks");
         }
     }
 }
