@@ -32,6 +32,7 @@ public class Program
         //}
         //SeedWorkers();
         PrintTeamsWithoutTasks();
+        PrintTeamCurrentTask();
     }
 
     public static void PrintTeamsWithoutTasks()
@@ -40,8 +41,22 @@ public class Program
         {
             foreach( var team in db.Teams)
             {
-                Console.WriteLine($"{team.TeamID} {team.Name}");
+                Console.WriteLine($"{team.TeamID}: {team.Name}");
             }
+        }
+    }
+
+    public static void PrintTeamCurrentTask()
+    {
+        var db = new ProjectmanegerContext();
+        foreach (var team in db.Teams.Include(o => o.CurrentTask))
+        {
+            if(team.CurrentTask is null)
+            {
+                Console.WriteLine($"{team.TeamID}: {team.Name} has no tasks");
+                continue;
+            }
+            Console.WriteLine($"{team.TeamID}: {team.Name} {team.CurrentTask.Name}");
         }
     }
 
