@@ -7,7 +7,7 @@ public class Program
 {
     public static void Main()
     {
-        SeedTasks();
+        //SeedTasks();
         //using(var db = new ProjectmanegerContext())
         //{
         //    foreach(Task task in db.Tasks)
@@ -31,6 +31,18 @@ public class Program
         //    Console.WriteLine(tasks.First().Todos.Count());
         //}
         //SeedWorkers();
+        PrintTeamsWithoutTasks();
+    }
+
+    public static void PrintTeamsWithoutTasks()
+    {
+        using( var db = new ProjectmanegerContext())
+        {
+            foreach( var team in db.Teams)
+            {
+                Console.WriteLine($"{team.TeamID} {team.Name}");
+            }
+        }
     }
 
     public static void SeedTasks()
