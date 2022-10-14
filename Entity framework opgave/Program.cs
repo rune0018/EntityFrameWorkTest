@@ -33,6 +33,7 @@ public class Program
         //SeedWorkers();
         PrintTeamsWithoutTasks();
         PrintTeamCurrentTask();
+        PrintTeamProgress();
     }
 
     public static void PrintTeamsWithoutTasks()
@@ -57,6 +58,29 @@ public class Program
                 continue;
             }
             Console.WriteLine($"{team.TeamID}: {team.Name} {team.CurrentTask.Name}");
+        }
+    }
+
+    public static void PrintTeamProgress()
+    {
+        var db = new ProjectmanegerContext();
+        foreach (var team in db.Teams.Include(o => o.CurrentTask).Include(o=> o.CurrentTask.Todos))
+        {
+            if(team.CurrentTask is null)
+            {
+                Console.WriteLine($"{team.TeamID}: {team.Name} has no tasks");
+                continue;
+            }
+            int total = 0;
+            int totalTasks =team.CurrentTask.Todos.Count();
+            foreach(var task in team.CurrentTask.Todos)
+            {
+                if (task.Complete)
+                {
+                    total ++;
+                }
+            }
+            Console.WriteLine($"{team.TeamID}: {team.Name} {team.CurrentTask.Name}: {total} of {totalTasks} done");
         }
     }
 
