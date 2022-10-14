@@ -7,7 +7,7 @@ public class Program
 {
     public static void Main()
     {
-        //SeedTasks();
+        SeedTasks();
         //using(var db = new ProjectmanegerContext())
         //{
         //    foreach(Task task in db.Tasks)
@@ -115,5 +115,11 @@ public class ProjectmanegerContext : DbContext
     {
         modelBuilder.Entity<TeamWorker>()
             .HasKey(o => new { o.TeamID, o.WorkerID });
+
+        modelBuilder.Entity<Team>()
+            .HasOne(o => o.CurrentTask);
+
+        modelBuilder.Entity<Worker>()
+            .HasOne(o => o.CurrentTodo);
     }
 }

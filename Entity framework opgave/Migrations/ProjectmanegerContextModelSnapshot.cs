@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,10 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity_framework_opgave.Migrations
 {
     [DbContext(typeof(ProjectmanegerContext))]
-    [Migration("20221014081723_CreatedTeamsWorkers")]
-    partial class CreatedTeamsWorkers
+    partial class ProjectmanegerContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -39,11 +37,16 @@ namespace Entity_framework_opgave.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CurrentTaskID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("TeamID");
+
+                    b.HasIndex("CurrentTaskID");
 
                     b.ToTable("Teams");
                 });
@@ -92,13 +95,27 @@ namespace Entity_framework_opgave.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CurrentTodoID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("WorkerID");
 
+                    b.HasIndex("CurrentTodoID");
+
                     b.ToTable("Workers");
+                });
+
+            modelBuilder.Entity("Team", b =>
+                {
+                    b.HasOne("Task", "CurrentTask")
+                        .WithMany()
+                        .HasForeignKey("CurrentTaskID");
+
+                    b.Navigation("CurrentTask");
                 });
 
             modelBuilder.Entity("TeamWorker", b =>
@@ -125,6 +142,15 @@ namespace Entity_framework_opgave.Migrations
                     b.HasOne("Task", null)
                         .WithMany("Todos")
                         .HasForeignKey("TaskID");
+                });
+
+            modelBuilder.Entity("Worker", b =>
+                {
+                    b.HasOne("Todo", "CurrentTodo")
+                        .WithMany()
+                        .HasForeignKey("CurrentTodoID");
+
+                    b.Navigation("CurrentTodo");
                 });
 
             modelBuilder.Entity("Task", b =>
