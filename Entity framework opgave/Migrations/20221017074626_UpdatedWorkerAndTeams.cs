@@ -4,7 +4,7 @@
 
 namespace Entity_framework_opgave.Migrations
 {
-    public partial class ConnectedThings : Migration
+    public partial class UpdatedWorkerAndTeams : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace Entity_framework_opgave.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    TeamID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,6 +42,24 @@ namespace Entity_framework_opgave.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TeamWorkers",
+                columns: table => new
+                {
+                    TeamID = table.Column<int>(type: "INTEGER", nullable: false),
+                    WorkerID = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamWorkers", x => new { x.TeamID, x.WorkerID });
+                    table.ForeignKey(
+                        name: "FK_TeamWorkers_Teams_TeamID",
+                        column: x => x.TeamID,
+                        principalTable: "Teams",
+                        principalColumn: "TeamID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Todos",
                 columns: table => new
                 {
@@ -48,7 +67,8 @@ namespace Entity_framework_opgave.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Complete = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TaskID = table.Column<int>(type: "INTEGER", nullable: true)
+                    TaskID = table.Column<int>(type: "INTEGER", nullable: true),
+                    WorkerID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,29 +99,10 @@ namespace Entity_framework_opgave.Migrations
                         principalColumn: "ID");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "TeamWorkers",
-                columns: table => new
-                {
-                    TeamID = table.Column<int>(type: "INTEGER", nullable: false),
-                    WorkerID = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamWorkers", x => new { x.TeamID, x.WorkerID });
-                    table.ForeignKey(
-                        name: "FK_TeamWorkers_Teams_TeamID",
-                        column: x => x.TeamID,
-                        principalTable: "Teams",
-                        principalColumn: "TeamID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeamWorkers_Workers_WorkerID",
-                        column: x => x.WorkerID,
-                        principalTable: "Workers",
-                        principalColumn: "WorkerID",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_TeamID",
+                table: "Tasks",
+                column: "TeamID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teams_CurrentTaskID",
@@ -119,13 +120,52 @@ namespace Entity_framework_opgave.Migrations
                 column: "TaskID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Todos_WorkerID",
+                table: "Todos",
+                column: "WorkerID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workers_CurrentTodoID",
                 table: "Workers",
                 column: "CurrentTodoID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Tasks_Teams_TeamID",
+                table: "Tasks",
+                column: "TeamID",
+                principalTable: "Teams",
+                principalColumn: "TeamID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TeamWorkers_Workers_WorkerID",
+                table: "TeamWorkers",
+                column: "WorkerID",
+                principalTable: "Workers",
+                principalColumn: "WorkerID",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Todos_Workers_WorkerID",
+                table: "Todos",
+                column: "WorkerID",
+                principalTable: "Workers",
+                principalColumn: "WorkerID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Tasks_Teams_TeamID",
+                table: "Tasks");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Todos_Tasks_TaskID",
+                table: "Todos");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Todos_Workers_WorkerID",
+                table: "Todos");
+
             migrationBuilder.DropTable(
                 name: "TeamWorkers");
 
@@ -133,13 +173,13 @@ namespace Entity_framework_opgave.Migrations
                 name: "Teams");
 
             migrationBuilder.DropTable(
+                name: "Tasks");
+
+            migrationBuilder.DropTable(
                 name: "Workers");
 
             migrationBuilder.DropTable(
                 name: "Todos");
-
-            migrationBuilder.DropTable(
-                name: "Tasks");
         }
     }
 }

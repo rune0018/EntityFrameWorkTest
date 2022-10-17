@@ -4,4 +4,5 @@
     public string Name { get; set; }
     public Todo? CurrentTodo { get; set; }
     public List<TeamWorker> TeamWorkers = new List<TeamWorker>();
+    public List<Todo> Todos = new List<Todo>();
 }

@@ -7,7 +7,13 @@ public class Program
 {
     public static void Main()
     {
-        //SeedTasks();
+        using(var db = new ProjectmanegerContext())
+        {
+            if(db.Tasks.Count() == 0)
+                SeedTasks();
+            if(db.Workers.Count() == 0)
+                SeedWorkers();
+        }
         //using(var db = new ProjectmanegerContext())
         //{
         //    foreach(Task task in db.Tasks)
@@ -30,7 +36,6 @@ public class Program
         //        .Where(x=> x.Name == "Produce software");
         //    Console.WriteLine(tasks.First().Todos.Count());
         //}
-        //SeedWorkers();
         PrintTeamsWithoutTasks();
         PrintTeamCurrentTask();
         PrintTeamProgress();
@@ -64,7 +69,8 @@ public class Program
     public static void PrintTeamProgress()
     {
         var db = new ProjectmanegerContext();
-        foreach (var team in db.Teams.Include(o => o.CurrentTask).Include(o=> o.CurrentTask.Todos))
+        foreach (var team in db.Teams.Include(o => o.CurrentTask)
+                                     .Include(o=> o.CurrentTask.Todos))
         {
             if(team.CurrentTask is null)
             {
@@ -73,11 +79,11 @@ public class Program
             }
             int total = 0;
             int totalTasks =team.CurrentTask.Todos.Count();
-            foreach(var task in team.CurrentTask.Todos)
+            foreach(var Todo in team.CurrentTask.Todos)
             {
-                if (task.Complete)
+                if (Todo.Complete)
                 {
-                    total ++;
+                    total++;
                 }
             }
             Console.WriteLine($"{team.TeamID}: {team.Name} {team.CurrentTask.Name}: {total} of {totalTasks} done");
@@ -169,8 +175,14 @@ public class ProjectmanegerContext : DbContext
 
         modelBuilder.Entity<Team>()
             .HasOne(o => o.CurrentTask);
+        modelBuilder.Entity<Team>()
+            .HasMany(o => o.Tasks);
 
         modelBuilder.Entity<Worker>()
             .HasOne(o => o.CurrentTodo);
+        modelBuilder.Entity<Worker>()
+            .HasMany(o => o.Todos);
+            
+       
     }
 }

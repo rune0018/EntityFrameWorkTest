@@ -26,7 +26,12 @@ namespace Entity_framework_opgave.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TeamID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("TeamID");
 
                     b.ToTable("Tasks");
                 });
@@ -82,9 +87,14 @@ namespace Entity_framework_opgave.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("WorkerID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
                     b.HasIndex("TaskID");
+
+                    b.HasIndex("WorkerID");
 
                     b.ToTable("Todos");
                 });
@@ -107,6 +117,13 @@ namespace Entity_framework_opgave.Migrations
                     b.HasIndex("CurrentTodoID");
 
                     b.ToTable("Workers");
+                });
+
+            modelBuilder.Entity("Task", b =>
+                {
+                    b.HasOne("Team", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("TeamID");
                 });
 
             modelBuilder.Entity("Team", b =>
@@ -142,6 +159,10 @@ namespace Entity_framework_opgave.Migrations
                     b.HasOne("Task", null)
                         .WithMany("Todos")
                         .HasForeignKey("TaskID");
+
+                    b.HasOne("Worker", null)
+                        .WithMany("Todos")
+                        .HasForeignKey("WorkerID");
                 });
 
             modelBuilder.Entity("Worker", b =>
@@ -154,6 +175,16 @@ namespace Entity_framework_opgave.Migrations
                 });
 
             modelBuilder.Entity("Task", b =>
+                {
+                    b.Navigation("Todos");
+                });
+
+            modelBuilder.Entity("Team", b =>
+                {
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("Worker", b =>
                 {
                     b.Navigation("Todos");
                 });
